@@ -1,25 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 import Image from "next/image";
 
+const links = [
+  { name: "Inicio", href: "#inicio" },
+  { name: "Sobre mí", href: "#sobre-mi" },
+  { name: "Áreas de trabajo", href: "#areas" },
+  { name: "Asociaciones", href: "#asociaciones" },
+  { name: "Publicaciones", href: "#publicaciones" },
+];
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("inicio");
 
-  const links = [
-    { name: "Inicio", href: "#inicio" },
-    { name: "Sobre mí", href: "#sobre-mi" },
-    { name: "Áreas de trabajo", href: "#areas" },
-    { name: "Formación", href: "#formacion" },
-    { name: "Publicaciones", href: "#publicaciones" },
-    { name: "Agenda", href: "#agenda" },
-    { name: "Contacto", href: "#contacto" },
-  ];
+  useEffect(() => {
+    const sections = links
+      .map((link) => document.getElementById(link.href.slice(1)))
+      .filter((section): section is HTMLElement => section !== null);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((entry) => entry.isIntersecting);
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <header className="relative z-50 w-full bg-[#07142d]">
+    <header className="sticky top-0 z-50 w-full bg-[#07142d] shadow-lg shadow-black/10">
       <nav className="mx-auto flex h-24 max-w-[1440px] items-center justify-between px-6 lg:px-12">
 
         {/* Logo */}
@@ -36,30 +52,36 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className="hidden items-center gap-8 lg:flex">
-          {links.map((link, index) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className={`relative py-3 text-[12px] font-semibold uppercase tracking-wide transition-colors duration-300
-                ${
-                  index === 0
-                    ? "text-[#d4a554]"
-                    : "text-white/80 hover:text-[#d4a554]"
-                }
-              `}
-            >
-              {link.name}
+          {links.map((link) => {
+            const isActive = activeSection === link.href.slice(1);
 
-              {index === 0 && (
-                <span className="absolute bottom-0 left-0 h-[2px] w-full bg-[#d4a554]" />
-              )}
-            </a>
-          ))}
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                className={`relative py-3 text-[12px] font-semibold uppercase tracking-wide transition-colors duration-300
+                  ${
+                    isActive
+                      ? "text-[#d4a554]"
+                      : "text-white/80 hover:text-[#d4a554]"
+                  }
+                `}
+              >
+                {link.name}
+
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] w-full origin-left bg-[#d4a554] transition-transform duration-300 ease-out ${
+                    isActive ? "scale-x-100" : "scale-x-0"
+                  }`}
+                />
+              </a>
+            );
+          })}
         </div>
 
         {/* CTA */}
         <a
-          href="#contacto"
+          href="mailto:zoraima.cuello@luxorconsult.com?subject=Contacto%20desde%20el%20sitio%20web"
           className="hidden items-center gap-3 rounded-sm bg-[#c99a4b] px-7 py-4 text-xs font-semibold uppercase tracking-wider text-white transition-all duration-300 hover:bg-[#daa953] hover:shadow-lg lg:flex"
         >
           Conversemos
@@ -69,38 +91,61 @@ export default function Navbar() {
         {/* Mobile button */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="text-white lg:hidden"
+          className="relative flex h-7 w-7 items-center justify-center text-white lg:hidden"
           aria-label="Abrir menú"
+          aria-expanded={menuOpen}
         >
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          <Menu
+            size={28}
+            className={`absolute transition-all duration-300 ease-in-out ${
+              menuOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
+            }`}
+          />
+          <X
+            size={28}
+            className={`absolute transition-all duration-300 ease-in-out ${
+              menuOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
+            }`}
+          />
         </button>
       </nav>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <div className="border-t border-white/10 bg-[#07142d] px-6 pb-8 pt-4 lg:hidden">
-          <div className="flex flex-col gap-2">
-            {links.map((link) => (
+      <div
+        className={`overflow-hidden border-t border-white/10 bg-[#07142d] transition-all duration-300 ease-in-out lg:hidden ${
+          menuOpen ? "max-h-[28rem] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="flex flex-col gap-2 px-6 pb-8 pt-4">
+          {links.map((link) => {
+            const isActive = activeSection === link.href.slice(1);
+
+            return (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className="border-b border-white/5 py-4 text-sm font-medium uppercase tracking-wide text-white/80 transition hover:text-[#d4a554]"
+                className={`border-b border-white/5 py-4 text-sm font-medium uppercase tracking-wide transition-colors duration-300 ${
+                  isActive
+                    ? "text-[#d4a554]"
+                    : "text-white/80 hover:text-[#d4a554]"
+                }`}
               >
                 {link.name}
               </a>
-            ))}
+            );
+          })}
 
-            <a
-              href="#contacto"
-              className="mt-5 flex items-center justify-center gap-3 bg-[#c99a4b] px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white"
-            >
-              Conversemos
-              <ArrowRight size={16} />
-            </a>
-          </div>
+          <a
+            href="mailto:zoraima.cuello@luxorconsult.com?subject=Contacto%20desde%20el%20sitio%20web"
+            onClick={() => setMenuOpen(false)}
+            className="mt-5 flex items-center justify-center gap-3 bg-[#c99a4b] px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white transition hover:bg-[#daa953]"
+          >
+            Conversemos
+            <ArrowRight size={16} />
+          </a>
         </div>
-      )}
+      </div>
     </header>
   );
 }
