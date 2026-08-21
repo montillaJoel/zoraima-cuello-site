@@ -41,33 +41,7 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Boletín */}
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#c99a4b]">
-              Suscríbete a mi boletín
-            </p>
-
-            <p className="mt-4 text-sm leading-6 text-white/60">
-              Recibe artículos, reflexiones y novedades sobre mi trabajo y
-              participación.
-            </p>
-
-            <form className="mt-6 flex max-w-sm" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                required
-                placeholder="Tu correo electrónico"
-                className="w-full border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#c99a4b] focus:outline-none"
-              />
-              <button
-                type="submit"
-                aria-label="Suscribirme"
-                className="flex shrink-0 items-center justify-center bg-[#c99a4b] px-5 transition hover:bg-[#d6aa5e]"
-              >
-                <ArrowRight size={18} />
-              </button>
-            </form>
-          </div>
+        
 
           {/* Redes */}
           <div>
