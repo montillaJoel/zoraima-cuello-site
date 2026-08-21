@@ -14,14 +14,14 @@ export default function AboutSection() {
           
           {/* Imagen */}
           <div>
-            <div className="relative h-[480px] overflow-hidden rounded-sm bg-white">
+            <div className="relative h-[480px] bg-transparent">
               <Image
                 src="/images.png"
                 alt="Zoraima Cuello"
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 priority
-                className="object-cover object-[center_25%]"
+                className="object-contain object-bottom"
               />
             </div>
           </div>
