@@ -45,33 +45,41 @@ export default function AssociationsSection() {
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {associations.map(({ logo, name, href }) => (
             <a
               key={name}
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex flex-col justify-between border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:border-[#c99a4b] hover:bg-white/[0.06]"
+              aria-label={`Visitar el sitio web de ${name}`}
+              className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition duration-500 hover:-translate-y-1 hover:border-[#c99a4b]/80 hover:shadow-[0_22px_55px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c99a4b]"
             >
-              <div className="relative h-12 w-12 overflow-hidden rounded-full bg-white p-2">
+              <div className="relative aspect-[16/10] overflow-hidden bg-white">
                 <Image
                   src={logo}
                   alt={name}
                   fill
-                  sizes="48px"
-                  className="object-contain"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-contain p-8 transition duration-700 ease-out group-hover:scale-110"
                 />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07142d]/45 via-transparent to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+
+                <span className="absolute right-5 top-5 grid h-11 w-11 translate-y-2 place-items-center rounded-full bg-[#c99a4b] text-[#07142d] opacity-0 shadow-lg transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                  <ArrowUpRight size={19} aria-hidden="true" />
+                </span>
               </div>
 
-              <p className="mt-6 text-sm font-semibold leading-6 text-white/85">
-                {name}
-              </p>
+              <div className="flex items-end justify-between gap-5 p-6">
+                <p className="max-w-[18rem] text-base font-semibold leading-6 text-white/90 transition group-hover:text-white">
+                  {name}
+                </p>
 
-              <span className="mt-5 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#c99a4b] opacity-0 transition group-hover:opacity-100">
-                Visitar sitio
-                <ArrowUpRight size={14} />
-              </span>
+                <span className="shrink-0 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[#c99a4b]">
+                  Ver sitio
+                </span>
+              </div>
             </a>
           ))}
         </div>
