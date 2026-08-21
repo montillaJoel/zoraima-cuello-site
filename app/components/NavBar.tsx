@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 import Image from "next/image";
@@ -16,6 +16,7 @@ const links = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
+  const [pressedSection, setPressedSection] = useState<string | null>(null);
 
   useEffect(() => {
     const sections = links
@@ -34,12 +35,42 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  const navigateToSection = (
+    event: ReactMouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    event.preventDefault();
+
+    const sectionId = href.slice(1);
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    setActiveSection(sectionId);
+    setPressedSection(sectionId);
+    setMenuOpen(false);
+    window.setTimeout(() => setPressedSection(null), 450);
+
+    section.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+    window.history.replaceState(null, "", href);
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full bg-[#07142d] shadow-lg shadow-black/10">
       <nav className="mx-auto flex h-24 max-w-[1440px] items-center justify-between px-6 lg:px-12">
 
         {/* Logo */}
-     <a href="#inicio" className="flex items-center">
+     <a
+       href="#inicio"
+       onClick={(event) => navigateToSection(event, "#inicio")}
+       className="flex items-center transition duration-300 active:scale-95"
+     >
   <Image
     src="/logo-zoraima.jpg"
     alt="Zoraima Cuello"
@@ -59,12 +90,15 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`relative py-3 text-[12px] font-semibold uppercase tracking-wide transition-colors duration-300
+                onClick={(event) => navigateToSection(event, link.href)}
+                aria-current={isActive ? "page" : undefined}
+                className={`relative py-3 text-[12px] font-semibold uppercase tracking-wide transition-all duration-300
                   ${
                     isActive
-                      ? "text-[#d4a554]"
+                      ? "text-[#d4a554] drop-shadow-[0_0_10px_rgba(212,165,84,0.35)]"
                       : "text-white/80 hover:text-[#d4a554]"
                   }
+                  ${pressedSection === link.href.slice(1) ? "scale-90" : "scale-100"}
                 `}
               >
                 {link.name}
@@ -124,12 +158,13 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className={`border-b border-white/5 py-4 text-sm font-medium uppercase tracking-wide transition-colors duration-300 ${
+                onClick={(event) => navigateToSection(event, link.href)}
+                aria-current={isActive ? "page" : undefined}
+                className={`border-b py-4 pl-4 text-sm font-medium uppercase tracking-wide transition-all duration-300 ${
                   isActive
-                    ? "text-[#d4a554]"
-                    : "text-white/80 hover:text-[#d4a554]"
-                }`}
+                    ? "border-[#d4a554]/60 bg-white/[0.04] text-[#d4a554]"
+                    : "border-white/5 text-white/80 hover:pl-6 hover:text-[#d4a554]"
+                } ${pressedSection === link.href.slice(1) ? "scale-[0.98]" : "scale-100"}`}
               >
                 {link.name}
               </a>
