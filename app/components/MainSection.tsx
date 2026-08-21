@@ -7,7 +7,7 @@ export default function MainSection() {
       id="inicio"
       className="min-h-screen bg-[#07142d] text-white"
     >
-      <NavBar />
+    
 
       <div className="mx-auto max-w-[1380px] px-6 sm:px-8 lg:px-10 xl:px-14">
         
@@ -65,7 +65,7 @@ export default function MainSection() {
           {/* Imagen */}
           <div className="relative min-h-[520px] overflow-hidden lg:min-h-[620px]">
             <Image
-              src="/banner.jpg"
+              src="/banner.png"
               alt="Zoraima Cuello"
               fill
               priority

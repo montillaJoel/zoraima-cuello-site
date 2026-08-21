@@ -16,7 +16,7 @@ export default function AboutSection() {
           <div>
             <div className="relative h-[480px] overflow-hidden rounded-sm bg-white">
               <Image
-                src="/images.jpg"
+                src="/images.png"
                 alt="Zoraima Cuello"
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
