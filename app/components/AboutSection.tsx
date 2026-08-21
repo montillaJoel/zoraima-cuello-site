@@ -136,7 +136,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        <div className="mt-10 align-center flex flex-col items-center gap-2 text-center">
+        {/* <div className="mt-10 align-center flex flex-col items-center gap-2 text-center">
             <p className="font-serif text-4xl italic text-white">
                 Zoraima Cuello
             </p>
@@ -144,7 +144,7 @@ export default function AboutSection() {
             <p className="mt-3 text-sm font-bold uppercase tracking-[0.2em] text-[#c99a4b]">
                 Zoraima Cuello
             </p>
-        </div>
+        </div> */}
 
       </div>
     </section>
